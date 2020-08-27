@@ -1,23 +1,26 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace AsyncFileIO
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            var relativePath = ".";
-
-            Console.WriteLine($"Working directory: \"{Path.GetFullPath(relativePath)}\"");
-
-            Console.WriteLine("\nDirectories:");
-            foreach (var directory in Directory.GetDirectories(relativePath))
-                Console.WriteLine($"\t{directory}");
-
-            Console.WriteLine("Files:");
-            foreach (var filename in Directory.GetFiles(relativePath))
-                Console.WriteLine($"\t{filename}");
+            var from = "from.txt";
+            var to = "to.txt";
+            var sw = Stopwatch.StartNew();
+            using (FileStream source = File.Open(from, FileMode.Open))
+            {
+                using (FileStream target = File.Open(to, FileMode.Open))
+                {
+                    await source.CopyToAsync(target);
+                }
+            }
+            sw.Stop();
+            Console.WriteLine(string.Format("{0:#,###,###.##}", sw.ElapsedMilliseconds));
         }
     }
 }
