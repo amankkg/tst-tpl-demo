@@ -25,7 +25,7 @@ namespace TPLDemo
             Task<Toast> toastTask = MakeToastWithButterAndJamAsync(2);
 
             var tasks = new List<Task> { eggsTask, baconTask, toastTask };
-            
+
             while (tasks.Count > 0)
             {
                 Task finished = await Task.WhenAny(tasks);
